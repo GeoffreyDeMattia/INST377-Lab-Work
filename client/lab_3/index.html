@@ -1,8 +1,3 @@
-<!--
-    Replace this with your working code from Lab 2, and include:
-    - The styles in this folder's `style.css`
-    - The script in script.js, which should be included via a `<script src="script.js" >` call before your closing </body> tag 
--->
 <!DOCTYPE html>
 <html lang="en">
   
@@ -40,13 +35,17 @@
           <!--Heading displayed above images-->
           <h3>Image Carousel</h3>
           <!--Make images display in a grid-->
-          <div class="grid">
-            <!--Images for mochi in the images directory on GH-->
-          <img src="images/mochi.gif" alt="This is a .gif of some mochi"> 
-          <img src="images/mochi.jpg" alt="This is a .jpg of some mochi in a bubble"> 
-          <img src="images/mochi.png" alt="This is a .png of some mochi">
-          <img src="images/mochi.svg" alt="This is a .svg of some mochi"> 
+          <div class="carousel">
+                <button class="prev">prev</button>
+              <div class="slides">
+                <!--Images for mochi in the images directory on GH-->
+              <div class="carousel_item visible"><img id="slide_1" src="images/mochi.jpg" alt="This is a .gif of some mochi"></div>
+              <div class="carousel_item hidden"><img id="slide_2" src="images/mochi copy.jpg" alt="This is a .jpg of some mochi in a bubble"></div>
+              <div class="carousel_item hidden"><img id="slide_3" src="images/mochi copy 2.jpg" alt="This is a .png of some mochi"></div>
+              <div class="carousel_item hidden"><img id="slide_4" src="images/mochi copy 3.jpg" alt="This is a .svg of some mochi"></div>
+              </div>
           </div>
+          <button class="next">next</button>
           <!--Add a box around image descriptions-->
           <div class="box">
             <!--Discription of images above-->
@@ -58,8 +57,12 @@
 
         </div>
       </div>
-    </div>
+    
       <!--Footer with link to Git Hub account-->
     <footer class="footer">GeoffreyDeMattia: <a href="http://github.com/GeoffreyDeMattia/" target="_blank" rel="noopener noreferrer">Geoffrey DeMattia's Git Hub</a></footer>
+    </div>
+    <script src="script.js">
+
+    </script>
   </body>
 </html>
