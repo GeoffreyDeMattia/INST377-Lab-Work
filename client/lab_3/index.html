@@ -3,3 +3,63 @@
     - The styles in this folder's `style.css`
     - The script in script.js, which should be included via a `<script src="script.js" >` call before your closing </body> tag 
 -->
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!--Title that will appear on browser tab-->
+    <title>Geoffrey DeMattia's Labs</title>
+    <!--Apply CSS stylesheet to HTML-->
+    <link rel="stylesheet" href="style.css">
+  </head>
+  
+  <body>
+    <!--Add warpper to body-->
+    <div class="wrapper">
+      <header class="header"><h1>Geoffrey DeMattia's Labs for INST377</h1></header>
+      
+      <div class="container">
+        <!--Add left section box-->
+        <div class="left_section box">
+          <!--Heading above album names-->
+          <h3>Album Names</h3>
+          <!--Ordered list of album names-->
+          <ol class="box">
+          <li>Era Extrana - Neon Indian</li>
+          <li>Tourist History - Two Door Cinema Club</li>
+          <li>Weather - Tycho</li>
+          <li>Re:Upload - Livetune</li>
+          <li>Kintsugi - Death Cab for Cutie</li>
+        </ol>
+        </div>
+        <!--Add right section box-->
+        <div class="right_section box">
+          <!--Heading displayed above images-->
+          <h3>Image Carousel</h3>
+          <!--Make images display in a grid-->
+          <div class="grid">
+            <!--Images for mochi in the images directory on GH-->
+          <img src="images/mochi.gif" alt="This is a .gif of some mochi"> 
+          <img src="images/mochi.jpg" alt="This is a .jpg of some mochi in a bubble"> 
+          <img src="images/mochi.png" alt="This is a .png of some mochi">
+          <img src="images/mochi.svg" alt="This is a .svg of some mochi"> 
+          </div>
+          <!--Add a box around image descriptions-->
+          <div class="box">
+            <!--Discription of images above-->
+             <p>Image 1 is a .gif of some mochi.
+                Image 2 is a .jpg of some mochi.
+                Image 3 is a .png of some mochi.
+                Image 4 is a .svg of some mochi.</p>
+          </div>
+
+        </div>
+      </div>
+    </div>
+      <!--Footer with link to Git Hub account-->
+    <footer class="footer">GeoffreyDeMattia: <a href="http://github.com/GeoffreyDeMattia/" target="_blank" rel="noopener noreferrer">Geoffrey DeMattia's Git Hub</a></footer>
+  </body>
+</html>
