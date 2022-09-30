@@ -1,10 +1,20 @@
 document.addEventListener('DOMContentLoaded', () => {
   const grid = document.querySelector('.grid');
   let squares = Array.from(document.querySelectorAll('.grid div'));
-  const ScoreDispaly = document.querySelector('#score');
-  const StartBtn = document.querySelector('#start-button');
+  const scoreDispaly = document.querySelector('#score');
+  const startBtn = document.querySelector('#start-button');
   const width = 10;
-  
+  let nextRandom = 0;
+  let timerId;
+  let score = 0;
+  const colors = [
+    'orange',
+    'red',
+    'purple',
+    'green',
+    'blue'
+  ];
+
   // Shapes
   const lTeromino = [
     [1, width+1, width * 2 + 1, 2],
@@ -55,6 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function draw () {
     current.forEach(index => {
       squares[currentPosition + index].classList.add('tetromino');
+      squares[currentPosition + index].style.backgroundColor = colors[random];
     });
   }
   draw();
@@ -64,21 +75,28 @@ document.addEventListener('DOMContentLoaded', () => {
   function undraw() {
     current.forEach(index => {
       squares[currentPosition + index].classList.remove('tetromino')
+      squares[currentPosition + index].style.backgroundColor = '';
     });
   }
 
   // Make shape move
 
-  timerId = setInterval(moveDown, 1000);
+  // timerId = setInterval(moveDown, 1000);
 
   // assign controls
 
   function control(e) {
     if(e.keyCode === 37) {
       moveLeft();
+    } else if (e.keyCode === 38) {
+      rotate();
+    } else if (e.keyCode === 39) {
+      moveRight();
+    } else if (e.keyCode === 40) {
+      moveDown();
     }
   }
-
+  document.addEventListener('keyup', control);
   // Move down function
 
   function moveDown() {
@@ -91,15 +109,18 @@ document.addEventListener('DOMContentLoaded', () => {
   // Freeze function
 
   function freeze() {
-    if(current.some(index => squares[currentPosition + index +width].classList.contains('taken'))) {
+    if (current.some(index => squares[currentPosition + index +width].classList.contains('taken'))) {
       current.forEach(index => squares[currentPosition + index].classList.add('taken'));
 
       // Start new shape falling
-
-      random = Math.floor(Math.random() * theTetrominos.length);
+      random = nextRandom; 
+      nextRandom = Math.floor(Math.random() * theTetrominos.length);
       current = theTetrominos[random][currentRotation];
       currentPosition = 4;
       draw();
+      displayShape();
+      addScore();
+      gameOver();
     }
   }
 
@@ -116,5 +137,105 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     draw();
+  }
+
+  // Move right
+
+  function moveRight() {
+    undraw();
+    const isAtRightEdge = current.some(index => (currentPosition + index) % width === width - 1);
+    if (!isAtRightEdge) currentPosition += 1;
+
+    if (current.some(index => squares[currentPosition + index].classList.contains('taken'))) {
+      currentPosition -= 1;
+    }
+    draw();
+  }
+
+  // Rotate shape
+
+  function rotate() {
+    undraw();
+    currentRotation ++;
+    if (currentRotation === current.length) {
+      currentRotation = 0;
+    }
+    current = theTetrominos[random][currentRotation];
+    draw();
+  }
+
+  // Show up in mini grid
+
+  const displaySquares = document.querySelectorAll('.mini-grid div');
+  const displayWidth = 4;
+  let displayIndex = 0;
+
+  
+  // Show shapes in first rotations
+
+  const upNextTetrominoes = [
+    [1, displayWidth + 1, displayWidth * 2 + 1, 2],
+    [0, displayWidth, displayWidth + 1, displayWidth * 2 + 1],
+    [1, displayWidth, displayWidth + 1, displayWidth + 2], 
+    [0, 1, displayWidth, displayWidth + 1],
+    [1, displayWidth + 1, displayWidth * 2 + 1, displayWidth * 3 + 1]
+  ];
+
+  // Display shapes
+
+  function displayShape() {
+    displaySquares.forEach(square => {
+      square.classList.remove('tetromino');
+      square.style.backgroundColor = '';
+    });
+    upNextTetrominoes[nextRandom].forEach(index => {
+      displaySquares[displayIndex + index].classList.add('tetromino');
+      displaySquares[displayIndex + index].style.backgroundColor = colors[nextRandom];
+    });
+  }
+
+
+  // Add start/pause button
+
+  startBtn.addEventListener('click', () => {
+    if (timerId) {
+      clearInterval(timerId);
+      timerId = null;
+    } else {
+      draw()
+      timerId = setInterval(moveDown, 1000)
+      nextRandom = Math.floor(Math.random() * theTetrominos.length)
+      displayShape();
+    }
+  })
+
+
+  // Add score
+
+  function addScore() {
+    for (let i = 0; i < 199; i += width) {
+      const row = [i, i + 1, i + 2, i + 3, i + 4, i + 5, i + 6, i + 7, i + 8, i + 9];
+      if (row.every((index) => squares[index].classList.contains('taken'))) {
+        score +=10;
+        scoreDispaly.innerHTML = score;
+        row.forEach((index) => {
+          squares[index].classList.remove('taken');
+          squares[index].classList.remove('tetromino');
+          squares[index].style.backgroundColor = ''
+        });
+        const squaresRemoved = squares.splice(i, width);
+        squares = squaresRemoved.concat(squares);
+        squares.forEach(cell => grid.appendChild(cell));
+      }
+    }
+  }
+
+  // Game Over!
+
+  function gameOver() {
+    if (current.some(index => squares[currentPosition + index].classList.contains('taken'))) {
+      scoreDispaly.innerHTML = 'end';
+      clearInterval(timerId);
+    }
   }
 });
