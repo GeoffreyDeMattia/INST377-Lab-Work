@@ -11,8 +11,25 @@
     https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
 */
 
+function getRandomIntInclusive(min,max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1) + min);
+}
+
 function injectHTML(list) {
   console.log('fired injectHTML');
+  const target = document.querySelector("#restaurant_list");
+  target.innerHTML='';
+
+  const listEl = document.createElement('ol');
+  target.appendChild(listEl);
+
+  list.forEach(item =>{
+    const el = document.createElement('li');
+    el.innerText = item.name;
+    listEl.appendChild(el);
+  });
   /*
   ## JS and HTML Injection
     There are a bunch of methods to inject text or HTML into a document using JS
@@ -30,6 +47,12 @@ function injectHTML(list) {
 
 function processRestaurants(list) {
   console.log('fired restaurants list');
+  const range = [...Array(15).keys()]; // Special notation to create an array of 15 elements
+  const newArray = range.map((item) => {
+    const index = getRandomIntInclusive(0, list.length)
+    return list[index]
+  });
+  return newArray;
 
   /*
     ## Process Data Separately From Injecting It
@@ -76,7 +99,7 @@ async function mainEvent() {
     Dot notation is preferred in JS unless you have a good reason to use brackets
     The 'data' key, which we set at line 38 in foodServiceRoutes.js, contains all 1,000 records we need
   */
-  console.table(arrayFromJson.data);
+  //console.table(arrayFromJson.data);
 
   // in your browser console, try expanding this object to see what fields are available to work with
   // for example: arrayFromJson.data[0].name, etc
