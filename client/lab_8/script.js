@@ -40,11 +40,33 @@ function filterList(list, filterInputValue) {
 
 function initMap() {
   console.log('initMap');
-  const map = L.map('map').setView([51.505, -0.09], 13);
+  const map = L.map('map').setView([38.9897, -76.9378], 13);
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+  }).addTo(map);
+  return map;
+}
+
+function markerPlace(array, map) {
+
+  map.eachLayer((layer) => {
+    if (layer instanceof L.Marker) {
+      layer.remove();
+    }
+  });
+  array.forEach((item, index) => {
+    const {coordinates} = item.geocoded_column_1;
+    console.log(item);
+    L.marker([coordinates[1], coordinates[0]]).addTo(map);
+    if(index === 0) {
+      map.setView([coordinates[1], coordinates[0]], 9);
+    }
+  });
 }
 
 async function mainEvent() {
-  initMap();
+  const pageMap = initMap();
   // the async keyword means we can make API requests
   const form = document.querySelector('.main_form'); // get your main form so you can do JS with it
   const submit = document.querySelector('#get-resto'); // get a reference to your submit button
@@ -75,6 +97,7 @@ async function mainEvent() {
       console.log(event.target.value);
       const filteredList = filterList(currentList, event.target.value);
       injectHTML(filteredList);
+      markerPlace(filteredList, pageMap);
     });
 
     form.addEventListener('submit', (submitEvent) => {
@@ -87,6 +110,7 @@ async function mainEvent() {
       // And this function call will perform the "side effect" of injecting the HTML list for you
       // injectHTML(restaurantList);
       injectHTML(currentList);
+      markerPlace(currentList, pageMap);
 
       // By separating the functions, we open the possibility of regenerating the list
       // without having to retrieve fresh data every time
